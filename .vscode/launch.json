@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:AI_hw_3}",
+            "name": "Debug SwiftServer",
+            "target": "SwiftServer",
+            "configuration": "debug",
+            "preLaunchTask": "swift: Build Debug SwiftServer"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:AI_hw_3}",
+            "name": "Release SwiftServer",
+            "target": "SwiftServer",
+            "configuration": "release",
+            "preLaunchTask": "swift: Build Release SwiftServer"
+        }
+    ]
+}
