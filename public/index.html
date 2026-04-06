@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Survey Application</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1><i class="fas fa-poll"></i> Customer Feedback Survey</h1>
+            <p class="subtitle">Help us improve our services by answering a few questions</p>
+        </header>
+
+        <div class="content-wrapper">
+            <main class="main-content">
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p>Loading questions...</p>
+                </div>
+
+                <div class="error" id="error" style="display: none;">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h3>Unable to load questions</h3>
+                    <p id="error-message">There was an error connecting to the server.</p>
+                    <button class="btn retry-btn" id="retry-btn">
+                        <i class="fas fa-redo"></i> Try Again
+                    </button>
+                </div>
+
+                <form id="survey-form" style="display: none;">
+                    <div class="questions-container" id="questions-container">
+                        <!-- Questions will be dynamically inserted here -->
+                    </div>
+
+                    <div class="form-footer">
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progress-fill"></div>
+                            </div>
+                            <div class="progress-text">
+                                <span id="answered-count">0</span> of <span id="total-questions">0</span> questions answered
+                            </div>
+                        </div>
+
+                        <div class="buttons">
+                            <button type="button" class="btn secondary-btn" id="reset-btn">
+                                <i class="fas fa-undo"></i> Reset Form
+                            </button>
+                            <button type="submit" class="btn primary-btn" id="submit-btn" disabled>
+                                <i class="fas fa-paper-plane"></i> Submit Answers
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="success" id="success" style="display: none;">
+                    <div class="success-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h3>Thank You!</h3>
+                    <p>Your feedback has been successfully submitted.</p>
+                    <div class="success-details">
+                        <p><i class="fas fa-check"></i> <span id="submitted-count">0</span> answers submitted</p>
+                        <p><i class="fas fa-database"></i> Total answers stored: <span id="total-stored">0</span></p>
+                    </div>
+                    <button class="btn secondary-btn" id="new-survey-btn">
+                        <i class="fas fa-plus"></i> Start New Survey
+                    </button>
+                </div>
+            </main>
+
+            <aside class="sidebar">
+                <div class="info-card">
+                    <h3><i class="fas fa-info-circle"></i> About This Survey</h3>
+                    <p>This survey helps us understand your experience and improve our services.</p>
+                    <ul>
+                        <li><i class="fas fa-clock"></i> Takes 2-3 minutes</li>
+                        <li><i class="fas fa-shield-alt"></i> Your responses are anonymous</li>
+                        <li><i class="fas fa-mobile-alt"></i> Mobile-friendly interface</li>
+                    </ul>
+                </div>
+
+                <div class="stats-card">
+                    <h3><i class="fas fa-chart-bar"></i> Survey Stats</h3>
+                    <div class="stat">
+                        <div class="stat-label">Questions</div>
+                        <div class="stat-value" id="stats-questions">0</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-label">Answers Stored</div>
+                        <div class="stat-value" id="stats-answers">0</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-label">Response Time</div>
+                        <div class="stat-value">~3 min</div>
+                    </div>
+                </div>
+
+                <div class="api-info">
+                    <h4><i class="fas fa-code"></i> API Endpoints</h4>
+                    <div class="endpoint">
+                        <code>GET /questions</code>
+                        <span>Fetch survey questions</span>
+                    </div>
+                    <div class="endpoint">
+                        <code>POST /answers</code>
+                        <span>Submit answers</span>
+                    </div>
+                </div>
+            </aside>
+        </div>
+
+        <footer class="footer">
+            <p>Survey Application &copy; 2023 | Backend: Swift Server | Frontend: HTML/CSS/JS</p>
+            <p class="server-status">
+                Server Status: 
+                <span class="status-indicator" id="server-status">
+                    <span class="status-dot"></span>
+                    <span class="status-text">Checking...</span>
+                </span>
+            </p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

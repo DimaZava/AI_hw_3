@@ -13,11 +13,13 @@ How to run:
 5. The server will start on http://127.0.0.1:8080
 
 Available endpoints:
-- GET  /          - Welcome message
-- GET  /hello     - Hello World
-- POST /echo      - Echo endpoint
-- GET  /questions - Returns list of survey questions (3-5 items)
-- POST /answers   - Accepts user answers and stores them in memory
+- GET  /             - Serves frontend HTML
+- GET  /style.css    - Frontend CSS
+- GET  /script.js    - Frontend JavaScript
+- GET  /hello        - Hello World
+- POST /echo         - Echo endpoint
+- GET  /questions    - Returns list of survey questions (3-5 items)
+- POST /answers      - Accepts user answers and stores them in memory
 
 To test with curl:
 $ curl http://127.0.0.1:8080/
@@ -40,15 +42,99 @@ let group = MultiThreadedEventLoopGroup(numberOfThreads: System.coreCount)
 // Configure router
 var router = Router()
 
-// Welcome endpoint
+// Helper function to read file contents
+func readFileContents(_ path: String) -> String? {
+    let fileManager = FileManager.default
+    let currentDirectory = fileManager.currentDirectoryPath
+    let fullPath = currentDirectory + "/" + path
+    
+    guard fileManager.fileExists(atPath: fullPath),
+          let data = fileManager.contents(atPath: fullPath),
+          let content = String(data: data, encoding: .utf8) else {
+        return nil
+    }
+    
+    return content
+}
+
+// Serve frontend HTML
 router.addRoute(method: .GET, path: "/") { request, body, context in
-    let head = HTTPResponseHead(
-        version: request.version,
-        status: .ok,
-        headers: ["Content-Type": "text/plain"]
-    )
-    let body = "Welcome to Swift Server! You requested \(request.method) \(request.uri)"
-    return (head, body)
+    if let htmlContent = readFileContents("public/index.html") {
+        let head = HTTPResponseHead(
+            version: request.version,
+            status: .ok,
+            headers: ["Content-Type": "text/html"]
+        )
+        return (head, htmlContent)
+    } else {
+        let head = HTTPResponseHead(
+            version: request.version,
+            status: .ok,
+            headers: ["Content-Type": "text/html"]
+        )
+        let fallbackHTML = """
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Survey Application</title>
+            <style>
+                body { font-family: Arial, sans-serif; padding: 40px; text-align: center; }
+                h1 { color: #333; }
+                p { color: #666; }
+                a { color: #4b6cb7; text-decoration: none; }
+            </style>
+        </head>
+        <body>
+            <h1>Survey Application</h1>
+            <p>Frontend files not found. Please ensure the server is running from the correct directory.</p>
+            <p>Available API endpoints:</p>
+            <ul style="list-style: none; padding: 0;">
+                <li><a href="/questions">GET /questions</a> - Get survey questions</li>
+                <li><a href="/hello">GET /hello</a> - Hello endpoint</li>
+            </ul>
+        </body>
+        </html>
+        """
+        return (head, fallbackHTML)
+    }
+}
+
+// Serve CSS
+router.addRoute(method: .GET, path: "/style.css") { request, body, context in
+    if let cssContent = readFileContents("public/style.css") {
+        let head = HTTPResponseHead(
+            version: request.version,
+            status: .ok,
+            headers: ["Content-Type": "text/css"]
+        )
+        return (head, cssContent)
+    } else {
+        let head = HTTPResponseHead(
+            version: request.version,
+            status: .notFound,
+            headers: ["Content-Type": "text/plain"]
+        )
+        return (head, "CSS file not found")
+    }
+}
+
+// Serve JavaScript
+router.addRoute(method: .GET, path: "/script.js") { request, body, context in
+    if let jsContent = readFileContents("public/script.js") {
+        let head = HTTPResponseHead(
+            version: request.version,
+            status: .ok,
+            headers: ["Content-Type": "application/javascript"]
+        )
+        return (head, jsContent)
+    } else {
+        let head = HTTPResponseHead(
+            version: request.version,
+            status: .notFound,
+            headers: ["Content-Type": "text/plain"]
+        )
+        return (head, "JavaScript file not found")
+    }
 }
 
 // Hello endpoint
@@ -175,13 +261,16 @@ do {
     let channel = try bootstrap.bind(host: host, port: port).wait()
     print("Server started and listening on \(host):\(port)")
     print("Available routes:")
-    print("  GET  /          - Welcome message")
-    print("  GET  /hello     - Hello World")
-    print("  POST /echo      - Echo endpoint")
-    print("  GET  /questions - Returns list of survey questions (3-5 items)")
-    print("  POST /answers   - Accepts user answers and stores them in memory")
+    print("  GET  /             - Serves frontend HTML")
+    print("  GET  /style.css    - Frontend CSS")
+    print("  GET  /script.js    - Frontend JavaScript")
+    print("  GET  /hello        - Hello World")
+    print("  POST /echo         - Echo endpoint")
+    print("  GET  /questions    - Returns list of survey questions (3-5 items)")
+    print("  POST /answers      - Accepts user answers and stores them in memory")
     print("")
     print("Predefined questions loaded: \(predefinedQuestions.count)")
+    print("Frontend available at: http://\(host):\(port)/")
     try channel.closeFuture.wait()
 } catch {
     print("Failed to start server: \(error)")
