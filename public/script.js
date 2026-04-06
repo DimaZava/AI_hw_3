@@ -140,7 +140,7 @@ function renderQuestions() {
             <div class="question-header">
                 <div class="question-text">
                     <span class="required">${question.text}</span>
-                    <div class="question-type">${question.type}</div>
+                    <div class="question-type">${question.readableType}</div>
                 </div>
                 <div class="question-id">${index + 1}</div>
             </div>
