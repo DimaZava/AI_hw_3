@@ -1,10 +1,13 @@
 import Foundation
 
-/// Configuration containing predefined survey questions
-enum SurveyConfiguration {
-    
-    /// The list of predefined survey questions
-    static let questions: [Question] = [
+/// Protocol for providing survey questions
+protocol QuestionProvider {
+    var questions: [Question] { get }
+}
+
+/// Predefined question provider using static configuration
+struct PredefinedQuestionProviderImpl: QuestionProvider {
+    let questions: [Question] = [
         Question(
             id: 1,
             text: "How satisfied are you with our service?",

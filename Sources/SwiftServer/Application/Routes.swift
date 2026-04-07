@@ -5,19 +5,21 @@ import Foundation
 /// Route definitions for the HTTP server
 enum Routes {
     
-    /// Configures all routes on the given router
-    /// - Parameter router: The router to configure with routes
-    static func configureRoutes(on router: inout Router) {
-        configureFrontendRoutes(on: &router)
-        configureAPIRoutes(on: &router)
+    /// Configures all routes on the given router with dependencies
+    /// - Parameters:
+    ///   - router: The router to configure with routes
+    ///   - dependencies: The dependencies to use for route handlers
+    static func configureRoutes(on router: inout Router, dependencies: Dependencies) {
+        configureFrontendRoutes(on: &router, dependencies: dependencies)
+        configureAPIRoutes(on: &router, dependencies: dependencies)
     }
     
     // MARK: - Frontend Routes
     
-    private static func configureFrontendRoutes(on router: inout Router) {
+    private static func configureFrontendRoutes(on router: inout Router, dependencies: Dependencies) {
         // Serve frontend HTML
         router.addRoute(method: .GET, path: "/") { request, body, context in
-            if let htmlContent = FileUtilities.readFileContents("public/index.html") {
+            if let htmlContent = dependencies.fileReader.readFileContents("public/index.html") {
                 let head = HTTPResponseHead(
                     version: request.version,
                     status: .ok,
@@ -37,7 +39,7 @@ enum Routes {
         
         // Serve CSS
         router.addRoute(method: .GET, path: "/css/style.css") { request, body, context in
-            if let cssContent = FileUtilities.readFileContents("public/css/style.css") {
+            if let cssContent = dependencies.fileReader.readFileContents("public/css/style.css") {
                 let head = HTTPResponseHead(
                     version: request.version,
                     status: .ok,
@@ -56,7 +58,7 @@ enum Routes {
         
         // HEAD route for CSS
         router.addRoute(method: .HEAD, path: "/css/style.css") { request, body, context in
-            if FileUtilities.readFileContents("public/css/style.css") != nil {
+            if dependencies.fileReader.readFileContents("public/css/style.css") != nil {
                 let head = HTTPResponseHead(
                     version: request.version,
                     status: .ok,
@@ -75,7 +77,7 @@ enum Routes {
         
         // Serve Design Tokens CSS
         router.addRoute(method: .GET, path: "/css/design-tokens.css") { request, body, context in
-            if let cssContent = FileUtilities.readFileContents("public/css/design-tokens.css") {
+            if let cssContent = dependencies.fileReader.readFileContents("public/css/design-tokens.css") {
                 let head = HTTPResponseHead(
                     version: request.version,
                     status: .ok,
@@ -94,7 +96,7 @@ enum Routes {
         
         // HEAD route for Design Tokens CSS
         router.addRoute(method: .HEAD, path: "/css/design-tokens.css") { request, body, context in
-            if FileUtilities.readFileContents("public/css/design-tokens.css") != nil {
+            if dependencies.fileReader.readFileContents("public/css/design-tokens.css") != nil {
                 let head = HTTPResponseHead(
                     version: request.version,
                     status: .ok,
@@ -113,7 +115,7 @@ enum Routes {
         
         // Serve JavaScript
         router.addRoute(method: .GET, path: "/js/script.js") { request, body, context in
-            if let jsContent = FileUtilities.readFileContents("public/js/script.js") {
+            if let jsContent = dependencies.fileReader.readFileContents("public/js/script.js") {
                 let head = HTTPResponseHead(
                     version: request.version,
                     status: .ok,
@@ -132,7 +134,7 @@ enum Routes {
         
         // HEAD route for JavaScript
         router.addRoute(method: .HEAD, path: "/js/script.js") { request, body, context in
-            if FileUtilities.readFileContents("public/js/script.js") != nil {
+            if dependencies.fileReader.readFileContents("public/js/script.js") != nil {
                 let head = HTTPResponseHead(
                     version: request.version,
                     status: .ok,
@@ -152,7 +154,7 @@ enum Routes {
     
     // MARK: - API Routes
     
-    private static func configureAPIRoutes(on router: inout Router) {
+    private static func configureAPIRoutes(on router: inout Router, dependencies: Dependencies) {
         // Hello endpoint
         router.addRoute(method: .GET, path: "/hello") { request, body, context in
             let head = HTTPResponseHead(
@@ -183,7 +185,7 @@ enum Routes {
                 headers: ["Content-Type": "application/json"]
             )
             
-            if let json = encodeJSON(SurveyConfiguration.questions) {
+            if let json = dependencies.jsonCoder.encode(dependencies.questionProvider.questions) {
                 return (head, json)
             } else {
                 let errorHead = HTTPResponseHead(
@@ -206,7 +208,7 @@ enum Routes {
                 return (head, "Request body is required")
             }
             
-            guard let submission = decodeJSON(body, as: AnswerSubmission.self) else {
+            guard let submission = dependencies.jsonCoder.decode(body, as: AnswerSubmission.self) else {
                 let head = HTTPResponseHead(
                     version: request.version,
                     status: .badRequest,
@@ -216,7 +218,7 @@ enum Routes {
             }
             
             // Validate that question IDs exist
-            let validQuestionIds = Set(SurveyConfiguration.questions.map { $0.id })
+            let validQuestionIds = Set(dependencies.questionProvider.questions.map { $0.id })
             let invalidAnswers = submission.answers.filter { !validQuestionIds.contains($0.questionId) }
             
             if !invalidAnswers.isEmpty {
@@ -229,7 +231,7 @@ enum Routes {
             }
             
             // Store answers
-            AnswerStore.shared.addAnswers(submission.answers)
+            dependencies.answerStore.addAnswers(submission.answers)
             
             let head = HTTPResponseHead(
                 version: request.version,
@@ -240,10 +242,10 @@ enum Routes {
             let response = ResponseMessage(
                 message: "Answers received successfully",
                 receivedCount: submission.answers.count,
-                totalAnswersStored: AnswerStore.shared.getAnswerCount()
+                totalAnswersStored: dependencies.answerStore.getAnswerCount()
             )
             
-            if let json = encodeJSON(response) {
+            if let json = dependencies.jsonCoder.encode(response) {
                 return (head, json)
             } else {
                 let errorHead = HTTPResponseHead(

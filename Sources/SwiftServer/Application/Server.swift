@@ -8,7 +8,12 @@ enum Server {
     /// - Parameters:
     ///   - host: The host address to bind to (default: 127.0.0.1)
     ///   - port: The port to bind to (default: 8080)
-    static func start(host: String = ServerConstants.Server.defaultHost, port: Int = ServerConstants.Server.defaultPort) throws {
+    ///   - dependencies: The dependencies to use for the server (default: production dependencies)
+    static func start(
+        host: String = ServerConstants.Server.defaultHost,
+        port: Int = ServerConstants.Server.defaultPort,
+        dependencies: Dependencies = Dependencies.defaultDependencies()
+    ) throws {
         let group = MultiThreadedEventLoopGroup(numberOfThreads: System.coreCount)
         
         defer {
@@ -17,7 +22,7 @@ enum Server {
         
         // Configure router with all routes
         var router = Router()
-        Routes.configureRoutes(on: &router)
+        Routes.configureRoutes(on: &router, dependencies: dependencies)
         
         // Configure server bootstrap
         let bootstrap = ServerBootstrap(group: group)
@@ -33,7 +38,7 @@ enum Server {
         
         do {
             let channel = try bootstrap.bind(host: host, port: port).wait()
-            printServerStartupInfo(host: host, port: port)
+            printServerStartupInfo(host: host, port: port, dependencies: dependencies)
             try channel.closeFuture.wait()
         } catch {
             print("Failed to start server: \(error)")
@@ -42,7 +47,7 @@ enum Server {
     }
     
     /// Prints server startup information
-    private static func printServerStartupInfo(host: String, port: Int) {
+    private static func printServerStartupInfo(host: String, port: Int, dependencies: Dependencies) {
         print("Server started and listening on \(host):\(port)")
         print("Available routes:")
         print("  GET  /             - Serves frontend HTML")
@@ -50,10 +55,9 @@ enum Server {
         print("  GET  /js/script.js  - Frontend JavaScript")
         print("  GET  /hello        - Hello World")
         print("  POST /echo         - Echo endpoint")
-        print("  GET  /questions    - Returns list of survey questions (\(SurveyConfiguration.questions.count) items)")
+        print("  GET  /questions    - Returns list of survey questions (\(dependencies.questionProvider.questions.count) items)")
         print("  POST /answers      - Accepts user answers and stores them in memory")
         print("")
-        print("Predefined questions loaded: \(SurveyConfiguration.questions.count)")
         print("Frontend available at: http://\(host):\(port)/")
     }
 }

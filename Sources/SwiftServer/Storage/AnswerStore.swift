@@ -1,9 +1,14 @@
 import Foundation
 
-class AnswerStore {
-    static let shared = AnswerStore()
-    private init() {}
-    
+/// Protocol defining the interface for answer storage
+protocol AnswerStore {
+    func addAnswers(_ answers: [Answer])
+    func getAllAnswers() -> [Answer]
+    func getAnswerCount() -> Int
+}
+
+/// In-memory implementation of answer storage
+final class InMemoryAnswerStoreImpl: AnswerStore {
     private var allAnswers: [Answer] = []
     private let lock = NSLock()
     
