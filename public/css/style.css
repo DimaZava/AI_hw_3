@@ -117,7 +117,7 @@ body {
 .questions-container {
     display: flex;
     flex-direction: column;
-    gap: 45px;
+    gap: 16px;
 }
 
 .question-card {
@@ -127,7 +127,6 @@ body {
     border-left: 5px solid #4b6cb7;
     transition: transform 0.2s, box-shadow 0.2s;
     position: relative;
-    margin-bottom: 25px;
 }
 
 .question-card:last-child {
