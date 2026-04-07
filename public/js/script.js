@@ -218,9 +218,15 @@ function updateProgress() {
 // Update answer statistics
 async function updateAnswerStats() {
     try {
-        // We don't have a GET endpoint for answer count, so we'll estimate
-        // based on local storage or show placeholder
-        const storedCount = Object.keys(localStorage).filter(key => 
+        // Prefer server count stored in localStorage (updated after each submission)
+        const serverCount = localStorage.getItem('serverTotalAnswersStored');
+        if (serverCount !== null) {
+            statsAnswersEl.textContent = serverCount;
+            return;
+        }
+        
+        // Fallback: estimate based on local storage keys
+        const storedCount = Object.keys(localStorage).filter(key =>
             key.startsWith('survey_answer_')
         ).length;
         
@@ -271,6 +277,9 @@ function showSuccess(response) {
     
     // Update stats
     statsAnswersEl.textContent = response.totalAnswersStored || 0;
+    
+    // Store server count in localStorage for consistency
+    localStorage.setItem('serverTotalAnswersStored', response.totalAnswersStored.toString());
 }
 
 // Setup event listeners
