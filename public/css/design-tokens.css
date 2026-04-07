@@ -1,4 +1,4 @@
-/* Design Tokens - Spacing System (8px base unit) */
+/* Design Tokens - Apple-inspired minimalist design with glass morphism */
 :root {
     /* Spacing Scale (8px base) */
     --spacing-xxs: 4px;    /* Half unit for fine adjustments */
@@ -11,7 +11,7 @@
     --spacing-xxxl: 48px;  /* 6 units */
     --spacing-xxxxl: 64px; /* 8 units */
     
-    /* Font Sizes */
+    /* Font Sizes - Apple typography scale */
     --font-size-xs: 0.75rem;   /* 12px */
     --font-size-sm: 0.875rem;  /* 14px */
     --font-size-md: 1rem;      /* 16px */
@@ -21,22 +21,58 @@
     --font-size-xxxl: 2rem;    /* 32px */
     --font-size-xxxxl: 2.5rem; /* 40px */
     
-    /* Border Radius */
-    --border-radius-sm: 4px;
-    --border-radius-md: 8px;
-    --border-radius-lg: 12px;
-    --border-radius-xl: 16px;
-    --border-radius-xxl: 20px;
+    /* Apple-inspired Color Palette */
+    --color-system-gray: #8E8E93;
+    --color-system-gray2: #AEAEB2;
+    --color-system-gray3: #C7C7CC;
+    --color-system-gray4: #D1D1D6;
+    --color-system-gray5: #E5E5EA;
+    --color-system-gray6: #F2F2F7;
+    
+    --color-system-blue: #007AFF;
+    --color-system-green: #34C759;
+    --color-system-indigo: #5856D6;
+    --color-system-orange: #FF9500;
+    --color-system-pink: #FF2D55;
+    --color-system-purple: #AF52DE;
+    --color-system-red: #FF3B30;
+    --color-system-teal: #5AC8FA;
+    --color-system-yellow: #FFCC00;
+    
+    /* Background Colors */
+    --color-background-primary: #F2F2F7;
+    --color-background-secondary: #FFFFFF;
+    --color-background-tertiary: #EFEFF4;
+    
+    /* Text Colors */
+    --color-text-primary: #000000;
+    --color-text-secondary: #3C3C43;
+    --color-text-tertiary: #8E8E93;
+    --color-text-quaternary: #C7C7CC;
+    
+    /* Glass Morphism Effects */
+    --glass-background: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.8);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    --glass-blur: blur(20px);
+    --glass-backdrop: saturate(180%) blur(20px);
+    
+    /* Border Radius - Apple's rounded corners */
+    --border-radius-sm: 6px;
+    --border-radius-md: 10px;
+    --border-radius-lg: 14px;
+    --border-radius-xl: 18px;
+    --border-radius-xxl: 22px;
     --border-radius-round: 50%;
     
     /* Line Heights */
-    --line-height-tight: 1.25;
-    --line-height-normal: 1.5;
-    --line-height-relaxed: 1.75;
+    --line-height-tight: 1.2;
+    --line-height-normal: 1.4;
+    --line-height-relaxed: 1.6;
     
     /* Container Widths */
-    --container-max-width: 1400px;
-    --sidebar-width: 320px;
+    --container-max-width: 1200px;
+    --sidebar-width: 340px;
     
     /* Z-index layers */
     --z-index-dropdown: 1000;
@@ -47,20 +83,25 @@
     --z-index-popover: 1060;
     --z-index-tooltip: 1070;
     
-    /* Animation Durations */
-    --duration-fast: 150ms;
-    --duration-normal: 300ms;
-    --duration-slow: 500ms;
+    /* Animation Durations - Apple's smooth animations */
+    --duration-fast: 200ms;
+    --duration-normal: 400ms;
+    --duration-slow: 600ms;
     
-    /* Shadows */
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    /* Shadows - Subtle depth */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.12);
     
     /* Border Widths */
-    --border-width-thin: 1px;
-    --border-width-medium: 2px;
-    --border-width-thick: 4px;
-    --border-width-extra-thick: 5px;
+    --border-width-thin: 0.5px;
+    --border-width-medium: 1px;
+    --border-width-thick: 2px;
+    --border-width-extra-thick: 3px;
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, #007AFF 0%, #5856D6 100%);
+    --gradient-secondary: linear-gradient(135deg, #34C759 0%, #5AC8FA 100%);
+    --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%);
 }
