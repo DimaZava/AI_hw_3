@@ -66,6 +66,36 @@ enum ServerConstants {
         static let javascriptFile = "js/script.js"
     }
     
+    // MARK: - Frontend
+    
+    /// Frontend HTML constants
+    enum Frontend {
+        /// Fallback HTML page when index.html is not found
+        static let fallbackHTML = """
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>Survey Application</title>
+                <style>
+                    body { font-family: Arial, sans-serif; padding: 40px; text-align: center; }
+                    h1 { color: #333; }
+                    p { color: #666; }
+                    a { color: #4b6cb7; text-decoration: none; }
+                </style>
+            </head>
+            <body>
+                <h1>Survey Application</h1>
+                <p>Frontend files not found. Please ensure the server is running from the correct directory.</p>
+                <p>Available API endpoints:</p>
+                <ul style="list-style: none; padding: 0;">
+                    <li><a href="/questions">GET /questions</a> - Get survey questions</li>
+                    <li><a href="/hello">GET /hello</a> - Hello endpoint</li>
+                </ul>
+            </body>
+            </html>
+            """
+    }
+    
     // MARK: - Error Messages
     
     /// Error message constants
