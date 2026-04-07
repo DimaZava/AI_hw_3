@@ -18,19 +18,21 @@ enum Routes {
     
     private static func configureFrontendRoutes(on router: inout Router, dependencies: Dependencies) {
         // Serve frontend HTML
-        router.addRoute(method: .GET, path: "/") { request, body, context in
-            if let htmlContent = dependencies.fileReader.readFileContents("public/index.html") {
+        router.addRoute(method: .GET, path: ServerConstants.Endpoints.root) { request, body, context in
+            if let htmlContent = dependencies.fileReader.readFileContents(
+                "\(ServerConstants.Paths.publicDirectory)/\(ServerConstants.Paths.htmlFile)"
+            ) {
                 let head = HTTPResponseHead(
                     version: request.version,
                     status: .ok,
-                    headers: ["Content-Type": "text/html"]
+                    headers: ServerConstants.HTTP.htmlHeaders()
                 )
                 return (head, htmlContent)
             } else {
                 let head = HTTPResponseHead(
                     version: request.version,
                     status: .ok,
-                    headers: ["Content-Type": "text/html"]
+                    headers: ServerConstants.HTTP.htmlHeaders()
                 )
                 let fallbackHTML = ServerConstants.Frontend.fallbackHTML
                 return (head, fallbackHTML)
@@ -38,114 +40,126 @@ enum Routes {
         }
         
         // Serve CSS
-        router.addRoute(method: .GET, path: "/css/style.css") { request, body, context in
-            if let cssContent = dependencies.fileReader.readFileContents("public/css/style.css") {
+        router.addRoute(method: .GET, path: ServerConstants.Endpoints.cssStyle) { request, body, context in
+            if let cssContent = dependencies.fileReader.readFileContents(
+                "\(ServerConstants.Paths.publicDirectory)/\(ServerConstants.Paths.cssFile)"
+            ) {
                 let head = HTTPResponseHead(
                     version: request.version,
                     status: .ok,
-                    headers: ["Content-Type": "text/css"]
+                    headers: ServerConstants.HTTP.cssHeaders()
                 )
                 return (head, cssContent)
             } else {
                 let head = HTTPResponseHead(
                     version: request.version,
                     status: .notFound,
-                    headers: ["Content-Type": "text/plain"]
+                    headers: ServerConstants.HTTP.plainTextHeaders()
                 )
-                return (head, "CSS file not found")
+                return (head, ServerConstants.Errors.cssFileNotFound)
             }
         }
         
         // HEAD route for CSS
-        router.addRoute(method: .HEAD, path: "/css/style.css") { request, body, context in
-            if dependencies.fileReader.readFileContents("public/css/style.css") != nil {
+        router.addRoute(method: .HEAD, path: ServerConstants.Endpoints.cssStyle) { request, body, context in
+            if dependencies.fileReader.readFileContents(
+                "\(ServerConstants.Paths.publicDirectory)/\(ServerConstants.Paths.cssFile)"
+            ) != nil {
                 let head = HTTPResponseHead(
                     version: request.version,
                     status: .ok,
-                    headers: ["Content-Type": "text/css"]
+                    headers: ServerConstants.HTTP.cssHeaders()
                 )
                 return (head, "")
             } else {
                 let head = HTTPResponseHead(
                     version: request.version,
                     status: .notFound,
-                    headers: ["Content-Type": "text/plain"]
+                    headers: ServerConstants.HTTP.plainTextHeaders()
                 )
                 return (head, "")
             }
         }
         
         // Serve Design Tokens CSS
-        router.addRoute(method: .GET, path: "/css/design-tokens.css") { request, body, context in
-            if let cssContent = dependencies.fileReader.readFileContents("public/css/design-tokens.css") {
+        router.addRoute(method: .GET, path: ServerConstants.Endpoints.designTokensCSS) { request, body, context in
+            if let cssContent = dependencies.fileReader.readFileContents(
+                "\(ServerConstants.Paths.publicDirectory)/\(ServerConstants.Paths.designTokensCSSFile)"
+            ) {
                 let head = HTTPResponseHead(
                     version: request.version,
                     status: .ok,
-                    headers: ["Content-Type": "text/css"]
+                    headers: ServerConstants.HTTP.cssHeaders()
                 )
                 return (head, cssContent)
             } else {
                 let head = HTTPResponseHead(
                     version: request.version,
                     status: .notFound,
-                    headers: ["Content-Type": "text/plain"]
+                    headers: ServerConstants.HTTP.plainTextHeaders()
                 )
-                return (head, "Design tokens CSS file not found")
+                return (head, ServerConstants.Errors.designTokensCSSFileNotFound)
             }
         }
         
         // HEAD route for Design Tokens CSS
-        router.addRoute(method: .HEAD, path: "/css/design-tokens.css") { request, body, context in
-            if dependencies.fileReader.readFileContents("public/css/design-tokens.css") != nil {
+        router.addRoute(method: .HEAD, path: ServerConstants.Endpoints.designTokensCSS) { request, body, context in
+            if dependencies.fileReader.readFileContents(
+                "\(ServerConstants.Paths.publicDirectory)/\(ServerConstants.Paths.designTokensCSSFile)"
+            ) != nil {
                 let head = HTTPResponseHead(
                     version: request.version,
                     status: .ok,
-                    headers: ["Content-Type": "text/css"]
+                    headers: ServerConstants.HTTP.cssHeaders()
                 )
                 return (head, "")
             } else {
                 let head = HTTPResponseHead(
                     version: request.version,
                     status: .notFound,
-                    headers: ["Content-Type": "text/plain"]
+                    headers: ServerConstants.HTTP.plainTextHeaders()
                 )
                 return (head, "")
             }
         }
         
         // Serve JavaScript
-        router.addRoute(method: .GET, path: "/js/script.js") { request, body, context in
-            if let jsContent = dependencies.fileReader.readFileContents("public/js/script.js") {
+        router.addRoute(method: .GET, path: ServerConstants.Endpoints.javascript) { request, body, context in
+            if let jsContent = dependencies.fileReader.readFileContents(
+                "\(ServerConstants.Paths.publicDirectory)/\(ServerConstants.Paths.javascriptFile)"
+            ) {
                 let head = HTTPResponseHead(
                     version: request.version,
                     status: .ok,
-                    headers: ["Content-Type": "application/javascript"]
+                    headers: ServerConstants.HTTP.javascriptHeaders()
                 )
                 return (head, jsContent)
             } else {
                 let head = HTTPResponseHead(
                     version: request.version,
                     status: .notFound,
-                    headers: ["Content-Type": "text/plain"]
+                    headers: ServerConstants.HTTP.plainTextHeaders()
                 )
-                return (head, "JavaScript file not found")
+                return (head, ServerConstants.Errors.javascriptFileNotFound)
             }
         }
         
         // HEAD route for JavaScript
-        router.addRoute(method: .HEAD, path: "/js/script.js") { request, body, context in
-            if dependencies.fileReader.readFileContents("public/js/script.js") != nil {
+        router.addRoute(method: .HEAD, path: ServerConstants.Endpoints.javascript) { request, body, context in
+            if dependencies.fileReader.readFileContents(
+                "\(ServerConstants.Paths.publicDirectory)/\(ServerConstants.Paths.javascriptFile)"
+            ) != nil {
                 let head = HTTPResponseHead(
                     version: request.version,
                     status: .ok,
-                    headers: ["Content-Type": "application/javascript"]
+                    headers: ServerConstants.HTTP.javascriptHeaders()
                 )
                 return (head, "")
             } else {
                 let head = HTTPResponseHead(
                     version: request.version,
                     status: .notFound,
-                    headers: ["Content-Type": "text/plain"]
+                    headers: ServerConstants.HTTP.plainTextHeaders()
                 )
                 return (head, "")
             }
@@ -156,33 +170,33 @@ enum Routes {
     
     private static func configureAPIRoutes(on router: inout Router, dependencies: Dependencies) {
         // Hello endpoint
-        router.addRoute(method: .GET, path: "/hello") { request, body, context in
+        router.addRoute(method: .GET, path: ServerConstants.Endpoints.hello) { request, body, context in
             let head = HTTPResponseHead(
                 version: request.version,
                 status: .ok,
-                headers: ["Content-Type": "text/plain"]
+                headers: ServerConstants.HTTP.plainTextHeaders()
             )
             let body = "Hello, World!"
             return (head, body)
         }
         
         // Echo endpoint
-        router.addRoute(method: .POST, path: "/echo") { request, body, context in
+        router.addRoute(method: .POST, path: ServerConstants.Endpoints.echo) { request, body, context in
             let head = HTTPResponseHead(
                 version: request.version,
                 status: .ok,
-                headers: ["Content-Type": "text/plain"]
+                headers: ServerConstants.HTTP.plainTextHeaders()
             )
             let body = "Echo endpoint (POST) received. Body: \(body ?? "(empty)")"
             return (head, body)
         }
         
         // GET /questions endpoint
-        router.addRoute(method: .GET, path: "/questions") { request, body, context in
+        router.addRoute(method: .GET, path: ServerConstants.Endpoints.questions) { request, body, context in
             let head = HTTPResponseHead(
                 version: request.version,
                 status: .ok,
-                headers: ["Content-Type": "application/json"]
+                headers: ServerConstants.HTTP.jsonHeaders()
             )
             
             if let json = dependencies.jsonCoder.encode(dependencies.questionProvider.questions) {
@@ -191,30 +205,30 @@ enum Routes {
                 let errorHead = HTTPResponseHead(
                     version: request.version,
                     status: .internalServerError,
-                    headers: ["Content-Type": "text/plain"]
+                    headers: ServerConstants.HTTP.plainTextHeaders()
                 )
-                return (errorHead, "Failed to encode questions")
+                return (errorHead, ServerConstants.Errors.encodeQuestionsFailed)
             }
         }
         
         // POST /answers endpoint
-        router.addRoute(method: .POST, path: "/answers") { request, body, context in
+        router.addRoute(method: .POST, path: ServerConstants.Endpoints.answers) { request, body, context in
             guard let body = body else {
                 let head = HTTPResponseHead(
                     version: request.version,
                     status: .badRequest,
-                    headers: ["Content-Type": "text/plain"]
+                    headers: ServerConstants.HTTP.plainTextHeaders()
                 )
-                return (head, "Request body is required")
+                return (head, ServerConstants.Errors.bodyRequired)
             }
             
             guard let submission = dependencies.jsonCoder.decode(body, as: AnswerSubmission.self) else {
                 let head = HTTPResponseHead(
                     version: request.version,
                     status: .badRequest,
-                    headers: ["Content-Type": "text/plain"]
+                    headers: ServerConstants.HTTP.plainTextHeaders()
                 )
-                return (head, "Invalid JSON format. Expected {\"answers\": [{\"questionId\": 1, \"answer\": \"...\"}]}")
+                return (head, ServerConstants.Errors.invalidJSON)
             }
             
             // Validate that question IDs exist
@@ -225,9 +239,9 @@ enum Routes {
                 let head = HTTPResponseHead(
                     version: request.version,
                     status: .badRequest,
-                    headers: ["Content-Type": "text/plain"]
+                    headers: ServerConstants.HTTP.plainTextHeaders()
                 )
-                return (head, "Invalid question IDs: \(invalidAnswers.map { String($0.questionId) }.joined(separator: ", "))")
+                return (head, "\(ServerConstants.Errors.invalidQuestionIDsPrefix)\(invalidAnswers.map { String($0.questionId) }.joined(separator: ", "))")
             }
             
             // Store answers
@@ -236,7 +250,7 @@ enum Routes {
             let head = HTTPResponseHead(
                 version: request.version,
                 status: .ok,
-                headers: ["Content-Type": "application/json"]
+                headers: ServerConstants.HTTP.jsonHeaders()
             )
             
             let response = ResponseMessage(
@@ -251,9 +265,9 @@ enum Routes {
                 let errorHead = HTTPResponseHead(
                     version: request.version,
                     status: .internalServerError,
-                    headers: ["Content-Type": "text/plain"]
+                    headers: ServerConstants.HTTP.plainTextHeaders()
                 )
-                return (errorHead, "Failed to encode response")
+                return (errorHead, ServerConstants.Errors.encodeFailed)
             }
         }
     }

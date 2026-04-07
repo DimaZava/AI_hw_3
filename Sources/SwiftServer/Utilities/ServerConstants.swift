@@ -1,4 +1,5 @@
 import Foundation
+import NIOHTTP1
 
 /// Server configuration constants
 enum ServerConstants {
@@ -32,9 +33,7 @@ enum ServerConstants {
     /// HTTP-related constants
     enum HTTP {
         /// Default HTTP response headers
-        static let defaultHeaders: [String: String] = [
-            "Content-Type": "text/plain"
-        ]
+        static let defaultHeaders: HTTPHeaders = HTTPHeaders([("Content-Type", "text/plain")])
         
         /// JSON content type header
         static let jsonContentType = "application/json"
@@ -47,6 +46,31 @@ enum ServerConstants {
         
         /// JavaScript content type header
         static let javascriptContentType = "application/javascript"
+        
+        /// Creates headers for HTML content
+        static func htmlHeaders() -> HTTPHeaders {
+            return HTTPHeaders([("Content-Type", htmlContentType)])
+        }
+        
+        /// Creates headers for CSS content
+        static func cssHeaders() -> HTTPHeaders {
+            return HTTPHeaders([("Content-Type", cssContentType)])
+        }
+        
+        /// Creates headers for JavaScript content
+        static func javascriptHeaders() -> HTTPHeaders {
+            return HTTPHeaders([("Content-Type", javascriptContentType)])
+        }
+        
+        /// Creates headers for JSON content
+        static func jsonHeaders() -> HTTPHeaders {
+            return HTTPHeaders([("Content-Type", jsonContentType)])
+        }
+        
+        /// Creates headers for plain text content
+        static func plainTextHeaders() -> HTTPHeaders {
+            return HTTPHeaders([("Content-Type", "text/plain")])
+        }
     }
     
     // MARK: - File Paths
@@ -62,8 +86,40 @@ enum ServerConstants {
         /// CSS file path
         static let cssFile = "css/style.css"
         
+        /// Design tokens CSS file path
+        static let designTokensCSSFile = "css/design-tokens.css"
+        
         /// JavaScript file path
         static let javascriptFile = "js/script.js"
+    }
+    
+    // MARK: - Endpoints
+    
+    /// API endpoint path constants
+    enum Endpoints {
+        /// Root endpoint
+        static let root = "/"
+        
+        /// CSS style endpoint
+        static let cssStyle = "/css/style.css"
+        
+        /// Design tokens CSS endpoint
+        static let designTokensCSS = "/css/design-tokens.css"
+        
+        /// JavaScript endpoint
+        static let javascript = "/js/script.js"
+        
+        /// Hello endpoint
+        static let hello = "/hello"
+        
+        /// Echo endpoint
+        static let echo = "/echo"
+        
+        /// Questions endpoint
+        static let questions = "/questions"
+        
+        /// Answers endpoint
+        static let answers = "/answers"
     }
     
     // MARK: - Frontend
@@ -109,7 +165,22 @@ enum ServerConstants {
         /// Failed to encode error
         static let encodeFailed = "Failed to encode response"
         
+        /// Failed to encode questions error
+        static let encodeQuestionsFailed = "Failed to encode questions"
+        
         /// File not found error
         static let fileNotFound = "File not found"
+        
+        /// CSS file not found error
+        static let cssFileNotFound = "CSS file not found"
+        
+        /// Design tokens CSS file not found error
+        static let designTokensCSSFileNotFound = "Design tokens CSS file not found"
+        
+        /// JavaScript file not found error
+        static let javascriptFileNotFound = "JavaScript file not found"
+        
+        /// Invalid question IDs error prefix
+        static let invalidQuestionIDsPrefix = "Invalid question IDs: "
     }
 }
