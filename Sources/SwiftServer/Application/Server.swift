@@ -8,7 +8,7 @@ enum Server {
     /// - Parameters:
     ///   - host: The host address to bind to (default: 127.0.0.1)
     ///   - port: The port to bind to (default: 8080)
-    static func start(host: String = "127.0.0.1", port: Int = 8080) throws {
+    static func start(host: String = ServerConstants.Server.defaultHost, port: Int = ServerConstants.Server.defaultPort) throws {
         let group = MultiThreadedEventLoopGroup(numberOfThreads: System.coreCount)
         
         defer {
@@ -21,7 +21,7 @@ enum Server {
         
         // Configure server bootstrap
         let bootstrap = ServerBootstrap(group: group)
-            .serverChannelOption(ChannelOptions.backlog, value: 256)
+            .serverChannelOption(ChannelOptions.backlog, value: ServerConstants.Server.backlogSize)
             .serverChannelOption(ChannelOptions.socketOption(.so_reuseaddr), value: 1)
             .childChannelInitializer { channel in
                 channel.pipeline.configureHTTPServerPipeline().flatMap {
@@ -29,7 +29,7 @@ enum Server {
                 }
             }
             .childChannelOption(ChannelOptions.socketOption(.so_reuseaddr), value: 1)
-            .childChannelOption(ChannelOptions.maxMessagesPerRead, value: 1)
+            .childChannelOption(ChannelOptions.maxMessagesPerRead, value: ServerConstants.Server.maxMessagesPerRead)
         
         do {
             let channel = try bootstrap.bind(host: host, port: port).wait()

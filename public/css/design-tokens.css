@@ -1,0 +1,66 @@
+/* Design Tokens - Spacing System (8px base unit) */
+:root {
+    /* Spacing Scale (8px base) */
+    --spacing-xxs: 4px;    /* Half unit for fine adjustments */
+    --spacing-xs: 8px;     /* 1 unit */
+    --spacing-sm: 12px;    /* 1.5 units */
+    --spacing-md: 16px;    /* 2 units */
+    --spacing-lg: 24px;    /* 3 units */
+    --spacing-xl: 32px;    /* 4 units */
+    --spacing-xxl: 40px;   /* 5 units */
+    --spacing-xxxl: 48px;  /* 6 units */
+    --spacing-xxxxl: 64px; /* 8 units */
+    
+    /* Font Sizes */
+    --font-size-xs: 0.75rem;   /* 12px */
+    --font-size-sm: 0.875rem;  /* 14px */
+    --font-size-md: 1rem;      /* 16px */
+    --font-size-lg: 1.125rem;  /* 18px */
+    --font-size-xl: 1.25rem;   /* 20px */
+    --font-size-xxl: 1.5rem;   /* 24px */
+    --font-size-xxxl: 2rem;    /* 32px */
+    --font-size-xxxxl: 2.5rem; /* 40px */
+    
+    /* Border Radius */
+    --border-radius-sm: 4px;
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+    --border-radius-xl: 16px;
+    --border-radius-xxl: 20px;
+    --border-radius-round: 50%;
+    
+    /* Line Heights */
+    --line-height-tight: 1.25;
+    --line-height-normal: 1.5;
+    --line-height-relaxed: 1.75;
+    
+    /* Container Widths */
+    --container-max-width: 1400px;
+    --sidebar-width: 320px;
+    
+    /* Z-index layers */
+    --z-index-dropdown: 1000;
+    --z-index-sticky: 1020;
+    --z-index-fixed: 1030;
+    --z-index-modal-backdrop: 1040;
+    --z-index-modal: 1050;
+    --z-index-popover: 1060;
+    --z-index-tooltip: 1070;
+    
+    /* Animation Durations */
+    --duration-fast: 150ms;
+    --duration-normal: 300ms;
+    --duration-slow: 500ms;
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    
+    /* Border Widths */
+    --border-width-thin: 1px;
+    --border-width-medium: 2px;
+    --border-width-thick: 4px;
+    --border-width-extra-thick: 5px;
+}

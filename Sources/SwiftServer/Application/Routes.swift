@@ -76,6 +76,63 @@ enum Routes {
             }
         }
         
+        // HEAD route for CSS
+        router.addRoute(method: .HEAD, path: "/css/style.css") { request, body, context in
+            if FileUtilities.readFileContents("public/css/style.css") != nil {
+                let head = HTTPResponseHead(
+                    version: request.version,
+                    status: .ok,
+                    headers: ["Content-Type": "text/css"]
+                )
+                return (head, "")
+            } else {
+                let head = HTTPResponseHead(
+                    version: request.version,
+                    status: .notFound,
+                    headers: ["Content-Type": "text/plain"]
+                )
+                return (head, "")
+            }
+        }
+        
+        // Serve Design Tokens CSS
+        router.addRoute(method: .GET, path: "/css/design-tokens.css") { request, body, context in
+            if let cssContent = FileUtilities.readFileContents("public/css/design-tokens.css") {
+                let head = HTTPResponseHead(
+                    version: request.version,
+                    status: .ok,
+                    headers: ["Content-Type": "text/css"]
+                )
+                return (head, cssContent)
+            } else {
+                let head = HTTPResponseHead(
+                    version: request.version,
+                    status: .notFound,
+                    headers: ["Content-Type": "text/plain"]
+                )
+                return (head, "Design tokens CSS file not found")
+            }
+        }
+        
+        // HEAD route for Design Tokens CSS
+        router.addRoute(method: .HEAD, path: "/css/design-tokens.css") { request, body, context in
+            if FileUtilities.readFileContents("public/css/design-tokens.css") != nil {
+                let head = HTTPResponseHead(
+                    version: request.version,
+                    status: .ok,
+                    headers: ["Content-Type": "text/css"]
+                )
+                return (head, "")
+            } else {
+                let head = HTTPResponseHead(
+                    version: request.version,
+                    status: .notFound,
+                    headers: ["Content-Type": "text/plain"]
+                )
+                return (head, "")
+            }
+        }
+        
         // Serve JavaScript
         router.addRoute(method: .GET, path: "/js/script.js") { request, body, context in
             if let jsContent = FileUtilities.readFileContents("public/js/script.js") {
@@ -92,6 +149,25 @@ enum Routes {
                     headers: ["Content-Type": "text/plain"]
                 )
                 return (head, "JavaScript file not found")
+            }
+        }
+        
+        // HEAD route for JavaScript
+        router.addRoute(method: .HEAD, path: "/js/script.js") { request, body, context in
+            if FileUtilities.readFileContents("public/js/script.js") != nil {
+                let head = HTTPResponseHead(
+                    version: request.version,
+                    status: .ok,
+                    headers: ["Content-Type": "application/javascript"]
+                )
+                return (head, "")
+            } else {
+                let head = HTTPResponseHead(
+                    version: request.version,
+                    status: .notFound,
+                    headers: ["Content-Type": "text/plain"]
+                )
+                return (head, "")
             }
         }
     }
