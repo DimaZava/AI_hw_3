@@ -18,23 +18,11 @@ enum ServerConstants {
         static let maxMessagesPerRead: UInt = 1
     }
     
-    // MARK: - Question Configuration
-    
-    /// Question-related constants
-    enum Questions {
-        /// Minimum question ID
-        static let minQuestionId: Int = 1
-        /// Maximum question ID (based on predefined questions)
-        static let maxQuestionId: Int = 5
-    }
     
     // MARK: - HTTP Configuration
     
     /// HTTP-related constants
     enum HTTP {
-        /// Default HTTP response headers
-        static let defaultHeaders: HTTPHeaders = HTTPHeaders([("Content-Type", "text/plain")])
-        
         /// JSON content type header
         static let jsonContentType = "application/json"
         
@@ -167,9 +155,6 @@ enum ServerConstants {
         
         /// Failed to encode questions error
         static let encodeQuestionsFailed = "Failed to encode questions"
-        
-        /// File not found error
-        static let fileNotFound = "File not found"
         
         /// CSS file not found error
         static let cssFileNotFound = "CSS file not found"

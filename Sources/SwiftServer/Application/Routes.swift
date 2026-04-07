@@ -39,129 +39,61 @@ enum Routes {
             }
         }
         
-        // Serve CSS
-        router.addRoute(method: .GET, path: ServerConstants.Endpoints.cssStyle) { request, body, context in
-            if let cssContent = dependencies.fileReader.readFileContents(
-                "\(ServerConstants.Paths.publicDirectory)/\(ServerConstants.Paths.cssFile)"
-            ) {
-                let head = HTTPResponseHead(
-                    version: request.version,
-                    status: .ok,
-                    headers: ServerConstants.HTTP.cssHeaders()
-                )
-                return (head, cssContent)
-            } else {
-                let head = HTTPResponseHead(
-                    version: request.version,
-                    status: .notFound,
-                    headers: ServerConstants.HTTP.plainTextHeaders()
-                )
-                return (head, ServerConstants.Errors.cssFileNotFound)
-            }
-        }
+        // Define static file routes
+        let staticFiles = [
+            (path: ServerConstants.Endpoints.cssStyle,
+             fileSubpath: ServerConstants.Paths.cssFile,
+             contentTypeHeaders: ServerConstants.HTTP.cssHeaders,
+             notFoundError: ServerConstants.Errors.cssFileNotFound),
+            (path: ServerConstants.Endpoints.designTokensCSS,
+             fileSubpath: ServerConstants.Paths.designTokensCSSFile,
+             contentTypeHeaders: ServerConstants.HTTP.cssHeaders,
+             notFoundError: ServerConstants.Errors.designTokensCSSFileNotFound),
+            (path: ServerConstants.Endpoints.javascript,
+             fileSubpath: ServerConstants.Paths.javascriptFile,
+             contentTypeHeaders: ServerConstants.HTTP.javascriptHeaders,
+             notFoundError: ServerConstants.Errors.javascriptFileNotFound)
+        ]
         
-        // HEAD route for CSS
-        router.addRoute(method: .HEAD, path: ServerConstants.Endpoints.cssStyle) { request, body, context in
-            if dependencies.fileReader.readFileContents(
-                "\(ServerConstants.Paths.publicDirectory)/\(ServerConstants.Paths.cssFile)"
-            ) != nil {
-                let head = HTTPResponseHead(
-                    version: request.version,
-                    status: .ok,
-                    headers: ServerConstants.HTTP.cssHeaders()
-                )
-                return (head, "")
-            } else {
-                let head = HTTPResponseHead(
-                    version: request.version,
-                    status: .notFound,
-                    headers: ServerConstants.HTTP.plainTextHeaders()
-                )
-                return (head, "")
+        for (endpoint, fileSubpath, contentTypeHeaders, notFoundError) in staticFiles {
+            // GET handler
+            router.addRoute(method: .GET, path: endpoint) { request, body, context in
+                let fullPath = "\(ServerConstants.Paths.publicDirectory)/\(fileSubpath)"
+                if let content = dependencies.fileReader.readFileContents(fullPath) {
+                    let head = HTTPResponseHead(
+                        version: request.version,
+                        status: .ok,
+                        headers: contentTypeHeaders()
+                    )
+                    return (head, content)
+                } else {
+                    let head = HTTPResponseHead(
+                        version: request.version,
+                        status: .notFound,
+                        headers: ServerConstants.HTTP.plainTextHeaders()
+                    )
+                    return (head, notFoundError)
+                }
             }
-        }
-        
-        // Serve Design Tokens CSS
-        router.addRoute(method: .GET, path: ServerConstants.Endpoints.designTokensCSS) { request, body, context in
-            if let cssContent = dependencies.fileReader.readFileContents(
-                "\(ServerConstants.Paths.publicDirectory)/\(ServerConstants.Paths.designTokensCSSFile)"
-            ) {
-                let head = HTTPResponseHead(
-                    version: request.version,
-                    status: .ok,
-                    headers: ServerConstants.HTTP.cssHeaders()
-                )
-                return (head, cssContent)
-            } else {
-                let head = HTTPResponseHead(
-                    version: request.version,
-                    status: .notFound,
-                    headers: ServerConstants.HTTP.plainTextHeaders()
-                )
-                return (head, ServerConstants.Errors.designTokensCSSFileNotFound)
-            }
-        }
-        
-        // HEAD route for Design Tokens CSS
-        router.addRoute(method: .HEAD, path: ServerConstants.Endpoints.designTokensCSS) { request, body, context in
-            if dependencies.fileReader.readFileContents(
-                "\(ServerConstants.Paths.publicDirectory)/\(ServerConstants.Paths.designTokensCSSFile)"
-            ) != nil {
-                let head = HTTPResponseHead(
-                    version: request.version,
-                    status: .ok,
-                    headers: ServerConstants.HTTP.cssHeaders()
-                )
-                return (head, "")
-            } else {
-                let head = HTTPResponseHead(
-                    version: request.version,
-                    status: .notFound,
-                    headers: ServerConstants.HTTP.plainTextHeaders()
-                )
-                return (head, "")
-            }
-        }
-        
-        // Serve JavaScript
-        router.addRoute(method: .GET, path: ServerConstants.Endpoints.javascript) { request, body, context in
-            if let jsContent = dependencies.fileReader.readFileContents(
-                "\(ServerConstants.Paths.publicDirectory)/\(ServerConstants.Paths.javascriptFile)"
-            ) {
-                let head = HTTPResponseHead(
-                    version: request.version,
-                    status: .ok,
-                    headers: ServerConstants.HTTP.javascriptHeaders()
-                )
-                return (head, jsContent)
-            } else {
-                let head = HTTPResponseHead(
-                    version: request.version,
-                    status: .notFound,
-                    headers: ServerConstants.HTTP.plainTextHeaders()
-                )
-                return (head, ServerConstants.Errors.javascriptFileNotFound)
-            }
-        }
-        
-        // HEAD route for JavaScript
-        router.addRoute(method: .HEAD, path: ServerConstants.Endpoints.javascript) { request, body, context in
-            if dependencies.fileReader.readFileContents(
-                "\(ServerConstants.Paths.publicDirectory)/\(ServerConstants.Paths.javascriptFile)"
-            ) != nil {
-                let head = HTTPResponseHead(
-                    version: request.version,
-                    status: .ok,
-                    headers: ServerConstants.HTTP.javascriptHeaders()
-                )
-                return (head, "")
-            } else {
-                let head = HTTPResponseHead(
-                    version: request.version,
-                    status: .notFound,
-                    headers: ServerConstants.HTTP.plainTextHeaders()
-                )
-                return (head, "")
+            
+            // HEAD handler
+            router.addRoute(method: .HEAD, path: endpoint) { request, body, context in
+                let fullPath = "\(ServerConstants.Paths.publicDirectory)/\(fileSubpath)"
+                if dependencies.fileReader.readFileContents(fullPath) != nil {
+                    let head = HTTPResponseHead(
+                        version: request.version,
+                        status: .ok,
+                        headers: contentTypeHeaders()
+                    )
+                    return (head, "")
+                } else {
+                    let head = HTTPResponseHead(
+                        version: request.version,
+                        status: .notFound,
+                        headers: ServerConstants.HTTP.plainTextHeaders()
+                    )
+                    return (head, "")
+                }
             }
         }
     }
