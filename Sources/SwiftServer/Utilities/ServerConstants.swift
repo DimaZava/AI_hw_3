@@ -97,11 +97,8 @@ enum ServerConstants {
         /// JavaScript endpoint
         static let javascript = "/js/script.js"
         
-        /// Hello endpoint
-        static let hello = "/hello"
-        
-        /// Echo endpoint
-        static let echo = "/echo"
+        /// Health check endpoint
+        static let health = "/health"
         
         /// Questions endpoint
         static let questions = "/questions"

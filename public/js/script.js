@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // Check if server is running
 async function checkServerStatus() {
     try {
-        const response = await fetch(`${API_BASE_URL}/hello`, { 
+        const response = await fetch(`${API_BASE_URL}/health`, {
             method: 'GET',
             headers: { 'Accept': 'text/plain' }
         });

@@ -86,25 +86,14 @@ enum Routes {
     // MARK: - API Routes
     
     private static func configureAPIRoutes(on router: inout Router, dependencies: Dependencies) {
-        // Hello endpoint
-        router.addRoute(method: .GET, path: ServerConstants.Endpoints.hello) { request, body, context in
+        // Health check endpoint
+        router.addRoute(method: .GET, path: ServerConstants.Endpoints.health) { request, body, context in
             let head = HTTPResponseHead(
                 version: request.version,
                 status: .ok,
                 headers: ServerConstants.HTTP.plainTextHeaders()
             )
-            let body = "Hello, World!"
-            return (head, body)
-        }
-        
-        // Echo endpoint
-        router.addRoute(method: .POST, path: ServerConstants.Endpoints.echo) { request, body, context in
-            let head = HTTPResponseHead(
-                version: request.version,
-                status: .ok,
-                headers: ServerConstants.HTTP.plainTextHeaders()
-            )
-            let body = "Echo endpoint (POST) received. Body: \(body ?? "(empty)")"
+            let body = "OK"
             return (head, body)
         }
         

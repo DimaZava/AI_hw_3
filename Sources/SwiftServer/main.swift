@@ -16,15 +16,13 @@ Available endpoints:
 - GET  /             - Serves frontend HTML
 - GET  /css/style.css - Frontend CSS
 - GET  /js/script.js  - Frontend JavaScript
-- GET  /hello        - Hello World
-- POST /echo         - Echo endpoint
+- GET  /health       - Health check
 - GET  /questions    - Returns list of survey questions (3-5 items)
 - POST /answers      - Accepts user answers and stores them in memory
 
 To test with curl:
 $ curl http://127.0.0.1:8080/
-$ curl http://127.0.0.1:8080/hello
-$ curl -X POST http://127.0.0.1:8080/echo
+$ curl http://127.0.0.1:8080/health
 $ curl http://127.0.0.1:8080/questions
 $ curl -X POST http://127.0.0.1:8080/answers -H "Content-Type: application/json" -d '{"answers": [{"questionId": 1, "answer": "Yes"}, {"questionId": 2, "answer": "No"}]}'
 
