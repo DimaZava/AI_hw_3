@@ -109,10 +109,9 @@ These endpoints support the application but aren't core to business logic:
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| GET | `/` | Serves frontend HTML |
 | GET | `/health` | Health check (used by frontend for connection status) |
-| GET | `/css/style.css` | Frontend CSS |
-| GET | `/js/script.js` | Frontend JavaScript |
+
+**Note**: Static files (`/`, `/css/style.css`, `/js/script.js`) are automatically served by the server but are considered implementation details rather than part of the public API.
 
 ### Example API Usage
 ```bash
@@ -129,8 +128,9 @@ curl -X POST http://127.0.0.1:8080/answers \
 ```
 
 ### Endpoint Recommendations
-- **Essential for production**: `/questions`, `/answers`, `/`, static files
+- **Essential for production**: `/questions`, `/answers`
 - **Useful for monitoring**: `/health` (used by frontend for connection status)
+- **Implementation details**: Static files (automatically served)
 
 ## 🖥️ UI Overview
 
