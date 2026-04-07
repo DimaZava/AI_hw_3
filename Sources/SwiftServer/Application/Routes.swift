@@ -39,31 +39,16 @@ enum Routes {
             }
         }
         
-        // Define static file routes
-        let staticFiles = [
-            (path: ServerConstants.Endpoints.cssStyle,
-             fileSubpath: ServerConstants.Paths.cssFile,
-             contentTypeHeaders: ServerConstants.HTTP.cssHeaders,
-             notFoundError: ServerConstants.Errors.cssFileNotFound),
-            (path: ServerConstants.Endpoints.designTokensCSS,
-             fileSubpath: ServerConstants.Paths.designTokensCSSFile,
-             contentTypeHeaders: ServerConstants.HTTP.cssHeaders,
-             notFoundError: ServerConstants.Errors.designTokensCSSFileNotFound),
-            (path: ServerConstants.Endpoints.javascript,
-             fileSubpath: ServerConstants.Paths.javascriptFile,
-             contentTypeHeaders: ServerConstants.HTTP.javascriptHeaders,
-             notFoundError: ServerConstants.Errors.javascriptFileNotFound)
-        ]
-        
-        for (endpoint, fileSubpath, contentTypeHeaders, notFoundError) in staticFiles {
+        // Serve static files defined in StaticFile enum
+        for staticFile in StaticFile.allCases {
             // GET handler
-            router.addRoute(method: .GET, path: endpoint) { request, body, context in
-                let fullPath = "\(ServerConstants.Paths.publicDirectory)/\(fileSubpath)"
+            router.addRoute(method: .GET, path: staticFile.endpoint) { request, body, context in
+                let fullPath = "\(ServerConstants.Paths.publicDirectory)/\(staticFile.fileSubpath)"
                 if let content = dependencies.fileReader.readFileContents(fullPath) {
                     let head = HTTPResponseHead(
                         version: request.version,
                         status: .ok,
-                        headers: contentTypeHeaders()
+                        headers: staticFile.contentTypeHeaders()
                     )
                     return (head, content)
                 } else {
@@ -72,18 +57,18 @@ enum Routes {
                         status: .notFound,
                         headers: ServerConstants.HTTP.plainTextHeaders()
                     )
-                    return (head, notFoundError)
+                    return (head, staticFile.notFoundError)
                 }
             }
             
             // HEAD handler
-            router.addRoute(method: .HEAD, path: endpoint) { request, body, context in
-                let fullPath = "\(ServerConstants.Paths.publicDirectory)/\(fileSubpath)"
+            router.addRoute(method: .HEAD, path: staticFile.endpoint) { request, body, context in
+                let fullPath = "\(ServerConstants.Paths.publicDirectory)/\(staticFile.fileSubpath)"
                 if dependencies.fileReader.readFileContents(fullPath) != nil {
                     let head = HTTPResponseHead(
                         version: request.version,
                         status: .ok,
-                        headers: contentTypeHeaders()
+                        headers: staticFile.contentTypeHeaders()
                     )
                     return (head, "")
                 } else {
