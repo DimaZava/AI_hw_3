@@ -112,7 +112,12 @@ body {
 #survey-form {
     display: flex;
     flex-direction: column;
-    gap: 25px;
+}
+
+.questions-container {
+    display: flex;
+    flex-direction: column;
+    gap: 45px;
 }
 
 .question-card {
@@ -120,12 +125,19 @@ body {
     border-radius: 12px;
     padding: 25px;
     border-left: 5px solid #4b6cb7;
-    transition: transform 0.3s, box-shadow 0.3s;
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+    margin-bottom: 25px;
+}
+
+.question-card:last-child {
+    margin-bottom: 0;
 }
 
 .question-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    transform: translateY(-1px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+    z-index: 10;
 }
 
 .question-header {
