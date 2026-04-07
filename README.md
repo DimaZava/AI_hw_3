@@ -111,8 +111,6 @@ These endpoints support the application but aren't core to business logic:
 |--------|----------|-------------|
 | GET | `/health` | Health check (used by frontend for connection status) |
 
-**Note**: Static files (`/`, `/css/style.css`, `/js/script.js`) are automatically served by the server but are considered implementation details rather than part of the public API.
-
 ### Example API Usage
 ```bash
 # Health check
