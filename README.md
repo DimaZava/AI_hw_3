@@ -128,7 +128,6 @@ curl -X POST http://127.0.0.1:8080/answers \
 ### Endpoint Recommendations
 - **Essential for production**: `/questions`, `/answers`
 - **Useful for monitoring**: `/health` (used by frontend for connection status)
-- **Implementation details**: Static files (automatically served)
 
 ## 🖥️ UI Overview
 
