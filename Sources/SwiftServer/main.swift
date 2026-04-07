@@ -100,8 +100,8 @@ router.addRoute(method: .GET, path: "/") { request, body, context in
 }
 
 // Serve CSS
-router.addRoute(method: .GET, path: "/style.css") { request, body, context in
-    if let cssContent = readFileContents("public/style.css") {
+router.addRoute(method: .GET, path: "/css/style.css") { request, body, context in
+    if let cssContent = readFileContents("public/css/style.css") {
         let head = HTTPResponseHead(
             version: request.version,
             status: .ok,
@@ -119,8 +119,8 @@ router.addRoute(method: .GET, path: "/style.css") { request, body, context in
 }
 
 // Serve JavaScript
-router.addRoute(method: .GET, path: "/script.js") { request, body, context in
-    if let jsContent = readFileContents("public/script.js") {
+router.addRoute(method: .GET, path: "/js/script.js") { request, body, context in
+    if let jsContent = readFileContents("public/js/script.js") {
         let head = HTTPResponseHead(
             version: request.version,
             status: .ok,
