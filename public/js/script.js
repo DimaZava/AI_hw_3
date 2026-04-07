@@ -253,6 +253,10 @@ function showForm() {
     errorEl.style.display = 'none';
     surveyForm.style.display = 'flex';
     successEl.style.display = 'none';
+    
+    // Reset submit button to original state
+    submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Answers';
+    // Disabled state will be updated by updateProgress()
 }
 
 // Show success state
@@ -282,6 +286,8 @@ function setupEventListeners() {
             questions.forEach(question => {
                 answers[question.id] = '';
             });
+            // Reset submit button to original state
+            submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Answers';
             renderQuestions();
             updateProgress();
         }
@@ -352,6 +358,10 @@ function setupEventListeners() {
         questions.forEach(question => {
             answers[question.id] = '';
         });
+        
+        // Reset submit button to original state
+        submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Answers';
+        submitBtn.disabled = true; // Will be updated by updateProgress anyway
         
         renderQuestions();
         updateProgress();
